@@ -9,6 +9,9 @@ export type AssetOutPointData = {
     assetType: H256;
     amount: number;
 };
+/**
+ * 
+ */
 export class AssetOutPoint {
     private data: AssetOutPointData;
 
@@ -126,6 +129,24 @@ export type AssetTransferTransactionData = {
     inputs: AssetTransferInput[];
     outputs: AssetTransferOutput[];
 };
+/**
+ * Consumes the existing asset and creates a new asset. Ownership can be transferred during this process.
+ * AssetTransfer consists of AssetTransferInput's list to consume and AssetTransferOutput's list to create.
+ * AssetTransferInput consists of the following: 
+ * 1. AssetOutPoint, which points to the asset to be consumed.
+ * 2. lockScript, which proves ownership of the asset
+ * 3. unlockScript.
+ * AssetOutPoint consists of transactionHash and index, asset type, and amount.
+ * -The transaction that it points to must be either AssetMint or AssetTransfer.
+ * -index is what decides which Asset to point to amongst the Asset list that transaction creates.
+ * -The asset type and amount must be identical to the Asset that it points to.
+ * The hashed value(blake256) of lockScript must be identical to that of the pointed asset's lockScriptHash.
+ * The results of running the asset's parameter and lockScript,unlockScript must return successful in order for the Asset's Input to be valid.
+ * All inputs must be valid for the transaction to be valid.
+ * AssetTransferOutput consists of lockScriptHash and parameters, which mark ownership of the asset, and asset type and amount, which indicate the asset's type and quantity.
+ * After creating this asset's lockScript, set the lockScriptHash with the hashed value of the lockScript.
+ * When each asset types' amount have been summed, the sum of inputs and the sum of outputs must be identical.
+ */
 export class AssetTransferTransaction {
     private inputs: AssetTransferInput[];
     private outputs: AssetTransferOutput[];
